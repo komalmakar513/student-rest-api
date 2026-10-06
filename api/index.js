@@ -21,20 +21,13 @@ let students = [
     }
 ];
 
-// ===============================
 // GET ALL STUDENTS
-// ===============================
-
-app.get(["/students", "/api/students"], (req, res) => {
+app.get("/students", (req, res) => {
     res.status(200).json(students);
 });
 
-
-// ===============================
 // GET STUDENT BY ID
-// ===============================
-
-app.get(["/students/:id", "/api/students/:id"], (req, res) => {
+app.get("/students/:id", (req, res) => {
     const id = Number(req.params.id);
 
     const student = students.find(
@@ -50,12 +43,8 @@ app.get(["/students/:id", "/api/students/:id"], (req, res) => {
     res.status(200).json(student);
 });
 
-
-// ===============================
 // ADD NEW STUDENT
-// ===============================
-
-app.post(["/students", "/api/students"], (req, res) => {
+app.post("/students", (req, res) => {
     const { name, email, age } = req.body;
 
     if (!name || !email || !age) {
@@ -66,8 +55,8 @@ app.post(["/students", "/api/students"], (req, res) => {
 
     const newStudent = {
         id: students.length + 1,
-        name: name,
-        email: email,
+        name,
+        email,
         age: Number(age)
     };
 
@@ -76,12 +65,8 @@ app.post(["/students", "/api/students"], (req, res) => {
     res.status(201).json(newStudent);
 });
 
-
-// ===============================
 // UPDATE STUDENT
-// ===============================
-
-app.put(["/students/:id", "/api/students/:id"], (req, res) => {
+app.put("/students/:id", (req, res) => {
     const id = Number(req.params.id);
 
     const studentIndex = students.findIndex(
@@ -97,21 +82,17 @@ app.put(["/students/:id", "/api/students/:id"], (req, res) => {
     const { name, email, age } = req.body;
 
     students[studentIndex] = {
-        id: id,
-        name: name,
-        email: email,
+        id,
+        name,
+        email,
         age: Number(age)
     };
 
     res.status(200).json(students[studentIndex]);
 });
 
-
-// ===============================
 // DELETE STUDENT
-// ===============================
-
-app.delete(["/students/:id", "/api/students/:id"], (req, res) => {
+app.delete("/students/:id", (req, res) => {
     const id = Number(req.params.id);
 
     const studentIndex = students.findIndex(
@@ -131,10 +112,5 @@ app.delete(["/students/:id", "/api/students/:id"], (req, res) => {
         student: deletedStudent[0]
     });
 });
-
-
-// ===============================
-// VERCEL EXPORT
-// ===============================
 
 export default app;

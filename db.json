@@ -1,0 +1,28 @@
+{
+  "students": [
+    {
+      "id": "1",
+      "name": "Komal",
+      "email": "komal@gmail.com",
+      "age": 20
+    },
+    {
+      "id": "2",
+      "name": "Tannu",
+      "email": "tannu@gmail.com",
+      "age": 21
+    },
+    {
+      "name": "Komal",
+      "age": 20,
+      "id": "eOk2aQPRgyo"
+    },
+    {
+      "name": "Rahul",
+      "email": "rahul@gmail.com",
+      "age": 20,
+      "id": "lk64bGMoywE"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

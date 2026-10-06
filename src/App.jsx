@@ -6,24 +6,31 @@ const API_URL = "/api/students";
 
 function App() {
   const [students, setStudents] = useState([]);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
     age: ""
   });
+
   const [editingId, setEditingId] = useState(null);
 
   // GET: Fetch all students
   const fetchStudents = async () => {
-    const response = await axios.get(API_URL);
-    setStudents(response.data);
+    try {
+      const response = await axios.get(API_URL);
+      setStudents(response.data);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    }
   };
 
+  // Fetch students when page loads
   useEffect(() => {
     fetchStudents();
   }, []);
 
-  // Handle form input
+  // Handle input changes
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -35,37 +42,52 @@ function App() {
   const addStudent = async (e) => {
     e.preventDefault();
 
-    await axios.post(API_URL, {
-      name: form.name,
-      email: form.email,
-      age: Number(form.age)
-    });
+    try {
+      await axios.post(API_URL, {
+        name: form.name,
+        email: form.email,
+        age: Number(form.age)
+      });
 
-    resetForm();
-    fetchStudents();
+      resetForm();
+      fetchStudents();
+    } catch (error) {
+      console.error("Error adding student:", error);
+      alert("Unable to add student");
+    }
   };
 
   // PUT: Update student
   const updateStudent = async (e) => {
     e.preventDefault();
 
-    await axios.put(`${API_URL}/${editingId}`, {
-      name: form.name,
-      email: form.email,
-      age: Number(form.age)
-    });
+    try {
+      await axios.put(`${API_URL}/${editingId}`, {
+        name: form.name,
+        email: form.email,
+        age: Number(form.age)
+      });
 
-    resetForm();
-    fetchStudents();
+      resetForm();
+      fetchStudents();
+    } catch (error) {
+      console.error("Error updating student:", error);
+      alert("Unable to update student");
+    }
   };
 
-  // DELETE: Remove student
+  // DELETE: Delete student
   const deleteStudent = async (id) => {
-    await axios.delete(`${API_URL}/${id}`);
-    fetchStudents();
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      fetchStudents();
+    } catch (error) {
+      console.error("Error deleting student:", error);
+      alert("Unable to delete student");
+    }
   };
 
-  // Edit button
+  // Edit student
   const editStudent = (student) => {
     setEditingId(student.id);
 
@@ -90,10 +112,14 @@ function App() {
   return (
     <div className="app">
 
+      {/* Header */}
+
       <header>
         <div>
           <p className="tag">REST API PROJECT</p>
+
           <h1>Student Management</h1>
+
           <p className="subtitle">
             React + REST API + Postman
           </p>
@@ -104,6 +130,7 @@ function App() {
           API Connected
         </div>
       </header>
+
 
       <main>
 
@@ -129,7 +156,9 @@ function App() {
 
               <div>
                 <label>Name</label>
+
                 <input
+                  type="text"
                   name="name"
                   value={form.name}
                   onChange={handleChange}
@@ -138,8 +167,10 @@ function App() {
                 />
               </div>
 
+
               <div>
                 <label>Email</label>
+
                 <input
                   type="email"
                   name="email"
@@ -150,8 +181,10 @@ function App() {
                 />
               </div>
 
+
               <div>
                 <label>Age</label>
+
                 <input
                   type="number"
                   name="age"
@@ -159,16 +192,24 @@ function App() {
                   onChange={handleChange}
                   placeholder="Age"
                   required
+                  min="1"
                 />
               </div>
 
             </div>
 
+
             <div className="buttons">
 
-              <button className="primary" type="submit">
-                {editingId ? "Update Student" : "Add Student"}
+              <button
+                className="primary"
+                type="submit"
+              >
+                {editingId
+                  ? "Update Student"
+                  : "Add Student"}
               </button>
+
 
               {editingId && (
                 <button
@@ -192,10 +233,13 @@ function App() {
         <section className="card">
 
           <div className="table-title">
+
             <div>
               <p className="label">DATABASE</p>
+
               <h2>All Students</h2>
             </div>
+
 
             <button
               className="refresh"
@@ -203,11 +247,14 @@ function App() {
             >
               Refresh
             </button>
+
           </div>
+
 
           <table>
 
             <thead>
+
               <tr>
                 <th>ID</th>
                 <th>NAME</th>
@@ -215,41 +262,76 @@ function App() {
                 <th>AGE</th>
                 <th>ACTIONS</th>
               </tr>
+
             </thead>
+
 
             <tbody>
 
-              {students.map((student) => (
-                <tr key={student.id}>
+              {students.length === 0 ? (
 
-                  <td>#{student.id}</td>
-
-                  <td>
-                    <strong>{student.name}</strong>
+                <tr>
+                  <td colSpan="5">
+                    No students found
                   </td>
-
-                  <td>{student.email}</td>
-
-                  <td>{student.age}</td>
-
-                  <td>
-                    <button
-                      className="edit"
-                      onClick={() => editStudent(student)}
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      className="delete"
-                      onClick={() => deleteStudent(student.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-
                 </tr>
-              ))}
+
+              ) : (
+
+                students.map((student) => (
+
+                  <tr key={student.id}>
+
+                    <td>
+                      #{student.id}
+                    </td>
+
+
+                    <td>
+                      <strong>
+                        {student.name}
+                      </strong>
+                    </td>
+
+
+                    <td>
+                      {student.email}
+                    </td>
+
+
+                    <td>
+                      {student.age}
+                    </td>
+
+
+                    <td>
+
+                      <button
+                        className="edit"
+                        onClick={() =>
+                          editStudent(student)
+                        }
+                      >
+                        Edit
+                      </button>
+
+
+                      <button
+                        className="delete"
+                        onClick={() =>
+                          deleteStudent(student.id)
+                        }
+                      >
+                        Delete
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
 
             </tbody>
 
@@ -258,6 +340,9 @@ function App() {
         </section>
 
       </main>
+
+
+      {/* Footer */}
 
       <footer>
         Student REST API • React • Axios • Express

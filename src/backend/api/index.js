@@ -22,12 +22,12 @@ let students = [
 ];
 
 // GET all students
-app.get("/students", (req, res) => {
+app.get("/api/students", (req, res) => {
     res.status(200).json(students);
 });
 
 // GET student by ID
-app.get("/students/:id", (req, res) => {
+app.get("/api/students/:id", (req, res) => {
     const id = Number(req.params.id);
 
     const student = students.find(
@@ -44,7 +44,7 @@ app.get("/students/:id", (req, res) => {
 });
 
 // POST new student
-app.post("/students", (req, res) => {
+app.post("/api/students", (req, res) => {
     const { name, email, age } = req.body;
 
     if (!name || !email || !age) {
@@ -66,7 +66,7 @@ app.post("/students", (req, res) => {
 });
 
 // PUT update student
-app.put("/students/:id", (req, res) => {
+app.put("/api/students/:id", (req, res) => {
     const id = Number(req.params.id);
 
     const studentIndex = students.findIndex(
@@ -92,7 +92,7 @@ app.put("/students/:id", (req, res) => {
 });
 
 // DELETE student
-app.delete("/students/:id", (req, res) => {
+app.delete("/api/students/:id", (req, res) => {
     const id = Number(req.params.id);
 
     const studentIndex = students.findIndex(

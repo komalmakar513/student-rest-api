@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
-const API_URL = "/api/students";
+const API_URL = "https://student-rest-api-omega.vercel.app/api/students";
 
 function App() {
   const [students, setStudents] = useState([]);
